@@ -8,7 +8,9 @@ class Deck
     @deck = (deck * 3).shuffle
   end
 
-  def take_card
-    @deck.pop
+  def take_card(face_up = false)
+    card = @deck.pop
+    card.face = 1 if face_up
+    card
   end
 end
