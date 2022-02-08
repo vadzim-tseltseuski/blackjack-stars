@@ -18,7 +18,7 @@ class Player
   end
 
   def sit_table(table)
-    table.send(@type, self)
+    table.send("#{@type}=", self)
     @table = table
   end
 
