@@ -17,14 +17,8 @@ class Player
     validate!
   end
 
-  def sit_table(table)
-    table.send("#{@type}=", self)
-    @table = table
+  def one_more_card?
+    hand.size < 3
   end
-
-  def make_bet(bet_sum = 10)
-    bankroll -= bet_sum
-    table.send("#{@type}_bet", bet_sum)
-  end
-
 end
+

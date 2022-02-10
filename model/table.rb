@@ -14,14 +14,14 @@ class Table
   end
 
   [:player, :dealer].each do |type|
-      define_method "#{type}_bet" do |bet_sum|
-        eval("#{type}").make_bet(bet_sum)
-        bank[type] += bet_sum
-      end
-
       define_method "deal_card_for_#{type}" do
         face_up = true if type == :player
         eval("#{type}").hand.cards << deck.take_card(face_up)
       end
   end
+
+  def show
+    "#{player.name} - #{player.hand.score}\n#{player.hand.show}\nDealer - #{dealer.hand.score}\n#{dealer.hand.show}"
+  end
+
 end
