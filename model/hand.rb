@@ -21,11 +21,18 @@ class Hand
     cards.map(&:show).join(" ")
   end
 
+  def face_up
+    cards.each{ |card| card.face = 1}
+    self
+  end
+
+  def drop
+    cards.clear
+  end
+
   def size
     cards.size
   end
-
-
 
   def all_combination
     arr = cards.map(&:score)

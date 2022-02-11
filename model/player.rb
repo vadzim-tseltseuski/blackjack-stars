@@ -20,5 +20,14 @@ class Player
   def one_more_card?
     hand.size < 3
   end
+
+  def bet(bet_sum = 10)
+    self.bankroll -= bet_sum
+    bet_sum
+  end
+
+  def get_win(win_sum)
+    self.bankroll += win_sum
+  end
 end
 

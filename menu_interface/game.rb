@@ -7,7 +7,7 @@ class Game
 
   class << self
     def start_game
-      Game.new.show_menu
+      Game.new.round
     end
   end
 
@@ -15,11 +15,16 @@ class Game
     create_table
     create_player
     create_dealer
+  end
+
+  def round
+    system 'clear'
+    table.get_bet
     2.times do
       table.deal_card_for_player
       table.deal_card_for_dealer
     end
-    @now_move = table.player
+    show_menu
   end
 
   def show_menu
@@ -35,43 +40,66 @@ class Game
         send(MENU[menu_key][:method])
         system 'clear'
       end
-    finish_menu
+    finish
   end
 
   MENU = {
     '1' => { text: 'Пропустить', method: 'skip'},
     '2' => { text: 'Добавить карту', method: 'add_card'},
-    '3' => { text: 'Открыть карты', method: 'finish_menu'}
+    '3' => { text: 'Открыть карты', method: 'finish'}
   }
 
-  private
+private
+
+  def finish
+    system 'clear'
+    game_result = result
+    puts game_result
+    sleep(2)
+    table.pay_win(game_result)
+    puts RESULT_MSG[game_result]
+    puts table.player.hand.show
+    puts table.dealer.hand.face_up.show
+    continue_story
+    table.player.hand.drop
+    table.dealer.hand.drop
+    finish_menu
+  end
 
   def finish_menu
-    puts result_msg
+    system 'clear'
     puts '0 - ВЫХОД'
     puts '1 - Сыграть еще?'
     menu_key = gets.chomp
     return if menu_key == '0'
-    Game.start_game
+
+    round
   end
 
-  def result_msg
+  def result
     p_score = table.player.hand.score
     d_score = table.dealer.hand.score
     if p_score > 21 && d_score > 21
-      "У обоих перебор"
+      :bust
     elsif p_score < 21 && d_score > 21
-      "Игрок победил. Дилер перебор"
+      :player_win
     elsif p_score > 21 && d_score < 21
-      "Дилер победилю. Игрок перебор"
+      :dealer_win
     elsif 21 - p_score < d_score - 21
-      "Игрок победил"
+      :player_win
     elsif 21 - p_score > d_score - 21
-      "Дилер победил"
+      :dealer_win
     else
-        "Ничья"
+      :draw
     end
   end
+
+  RESULT_MSG = {
+    player_win: "Игрок победил",
+    dealer_win: "Дилер победилю",
+    draw: "Ничья",
+    bust: "У обоих перебор"
+  }
 
   def finish_game?
     (table.player.hand.size == 3 && table.dealer.hand.size == 3)
@@ -93,6 +121,7 @@ class Game
   def add_card
     if table.player.one_more_card?
       table.deal_card_for_player
+      dealer_move
     else
         puts "Вы не можете набрать больше карт"
         sleep(1)
@@ -128,11 +157,6 @@ class Game
   def create_table
     @table = Table.new
   end
-
-
-
-
-
 
   def continue_story
     puts '_____________________________'
