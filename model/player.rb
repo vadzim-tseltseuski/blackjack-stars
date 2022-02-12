@@ -30,4 +30,3 @@ class Player
     self.bankroll += win_sum
   end
 end
-

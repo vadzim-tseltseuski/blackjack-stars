@@ -1,11 +1,13 @@
 class Hand
-    attr_reader :cards
+  attr_reader :cards
 
   def initialize
     @cards = []
   end
 
   def score
+    return 0 if cards.empty?
+
     all_combination.reduce do |curr, prev|
       if curr.sum > 21 && prev.sum > 21
         21 - curr.sum > 21 - prev.sum ? curr : prev
@@ -17,13 +19,8 @@ class Hand
     end.sum
   end
 
-  def show
-    cards.map(&:show).join(" ")
-  end
-
-  def face_up
-    cards.each{ |card| card.face = 1}
-    self
+  def show(face = true)
+    cards.map { |card| card.show(face) }.join(' ')
   end
 
   def drop
