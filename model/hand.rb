@@ -11,7 +11,7 @@ class Hand
     all_combination.reduce do |curr, prev|
       if curr.sum > 21 && prev.sum > 21
         21 - curr.sum > 21 - prev.sum ? curr : prev
-      elsif curr.sum < 21 && prev.sum < 21
+      elsif curr.sum <= 21 && prev.sum <= 21
         21 - curr.sum < 21 - prev.sum ? curr : prev
       else
         curr.sum > 21 ? prev : curr

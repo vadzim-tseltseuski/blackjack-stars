@@ -51,6 +51,7 @@ class Game
       print 'Сделайте выбор >> '
       menu_key = gets.chomp
       exit if menu_key == '0'
+      next unless MENU[menu_key]
 
       send(MENU[menu_key][:method])
     end
@@ -127,6 +128,7 @@ class Game
       puts 'Дилер больше не набирает...'
       sleep(1)
     end
+    finish
   end
 
   def add_card
